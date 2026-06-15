@@ -1,24 +1,28 @@
-import { prisma } from "../../database/client";
-export class ApplicationRepository {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.applicationRepository = exports.ApplicationRepository = void 0;
+const client_1 = require("../../database/client");
+class ApplicationRepository {
     async findMany() {
-        return prisma.application.findMany({
+        return client_1.prisma.application.findMany({
             orderBy: { createdAt: "desc" },
         });
     }
     async findById(id) {
-        return prisma.application.findUnique({
+        return client_1.prisma.application.findUnique({
             where: { id },
         });
     }
     async create(data) {
-        return prisma.application.create({
+        return client_1.prisma.application.create({
             data,
         });
     }
     async delete(id) {
-        return prisma.application.delete({
+        return client_1.prisma.application.delete({
             where: { id },
         });
     }
 }
-export const applicationRepository = new ApplicationRepository();
+exports.ApplicationRepository = ApplicationRepository;
+exports.applicationRepository = new ApplicationRepository();

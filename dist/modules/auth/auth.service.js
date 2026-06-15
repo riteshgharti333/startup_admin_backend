@@ -1,25 +1,28 @@
-import { AppError } from "../../common/errors/AppError";
-import { comparePassword, hashPassword } from "../../common/utils/password";
-import { generateToken } from "../../common/utils/jwt";
-import { userRepository } from "../users/user.repository";
-import { HTTP_STATUS } from "../../common/constants/httpStatus";
-import { MESSAGES } from "../../common/constants/messages";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authService = void 0;
+const AppError_1 = require("../../common/errors/AppError");
+const password_1 = require("../../common/utils/password");
+const jwt_1 = require("../../common/utils/jwt");
+const user_repository_1 = require("../users/user.repository");
+const httpStatus_1 = require("../../common/constants/httpStatus");
+const messages_1 = require("../../common/constants/messages");
 class AuthService {
     async register(data) {
-        const existingUser = await userRepository.findByEmail(data.email);
+        const existingUser = await user_repository_1.userRepository.findByEmail(data.email);
         if (existingUser) {
-            throw new AppError({
-                statusCode: HTTP_STATUS.CONFLICT,
-                message: MESSAGES.EMAIL_ALREADY_EXISTS,
+            throw new AppError_1.AppError({
+                statusCode: httpStatus_1.HTTP_STATUS.CONFLICT,
+                message: messages_1.MESSAGES.EMAIL_ALREADY_EXISTS,
             });
         }
-        const hashedPassword = await hashPassword(data.password);
-        const user = await userRepository.create({
+        const hashedPassword = await (0, password_1.hashPassword)(data.password);
+        const user = await user_repository_1.userRepository.create({
             name: data.name,
             email: data.email,
             password: hashedPassword,
         });
-        const token = generateToken({
+        const token = (0, jwt_1.generateToken)({
             userId: user.id,
             email: user.email,
             role: user.role,
@@ -34,21 +37,21 @@ class AuthService {
         };
     }
     async login(data) {
-        const user = await userRepository.findByEmail(data.email);
+        const user = await user_repository_1.userRepository.findByEmail(data.email);
         if (!user) {
-            throw new AppError({
-                statusCode: HTTP_STATUS.UNAUTHORIZED,
-                message: MESSAGES.INVALID_CREDENTIALS,
+            throw new AppError_1.AppError({
+                statusCode: httpStatus_1.HTTP_STATUS.UNAUTHORIZED,
+                message: messages_1.MESSAGES.INVALID_CREDENTIALS,
             });
         }
-        const isPasswordValid = await comparePassword(data.password, user.password);
+        const isPasswordValid = await (0, password_1.comparePassword)(data.password, user.password);
         if (!isPasswordValid) {
-            throw new AppError({
-                statusCode: HTTP_STATUS.CONFLICT,
+            throw new AppError_1.AppError({
+                statusCode: httpStatus_1.HTTP_STATUS.CONFLICT,
                 message: "Invalid Email & Password",
             });
         }
-        const token = generateToken({
+        const token = (0, jwt_1.generateToken)({
             userId: user.id,
             email: user.email,
             role: user.role,
@@ -63,11 +66,11 @@ class AuthService {
         };
     }
     async me(userId) {
-        const user = await userRepository.findById(userId);
+        const user = await user_repository_1.userRepository.findById(userId);
         if (!user) {
-            throw new AppError({
-                statusCode: HTTP_STATUS.NOT_FOUND,
-                message: MESSAGES.USER_NOT_FOUND,
+            throw new AppError_1.AppError({
+                statusCode: httpStatus_1.HTTP_STATUS.NOT_FOUND,
+                message: messages_1.MESSAGES.USER_NOT_FOUND,
             });
         }
         return {
@@ -80,4 +83,4 @@ class AuthService {
         };
     }
 }
-export const authService = new AuthService();
+exports.authService = new AuthService();

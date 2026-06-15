@@ -1,31 +1,34 @@
-import { asyncHandler } from "../../common/utils/asyncHandler";
-import { apiResponse } from "../../common/utils/apiResponse";
-import { authService } from "./auth.service";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authController = void 0;
+const asyncHandler_1 = require("../../common/utils/asyncHandler");
+const apiResponse_1 = require("../../common/utils/apiResponse");
+const auth_service_1 = require("./auth.service");
 class AuthController {
-    register = asyncHandler(async (req, res) => {
-        const result = await authService.register(req.body);
-        return apiResponse({
+    register = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
+        const result = await auth_service_1.authService.register(req.body);
+        return (0, apiResponse_1.apiResponse)({
             res,
             statusCode: 201,
             message: "User registered successfully",
             data: result,
         });
     });
-    login = asyncHandler(async (req, res) => {
-        const result = await authService.login(req.body);
-        return apiResponse({
+    login = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
+        const result = await auth_service_1.authService.login(req.body);
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "Login successful",
             data: result,
         });
     });
-    me = asyncHandler(async (req, res) => {
-        const profile = await authService.me(req.user.userId);
-        return apiResponse({
+    me = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
+        const profile = await auth_service_1.authService.me(req.user.userId);
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "Profile fetched successfully",
             data: profile,
         });
     });
 }
-export const authController = new AuthController();
+exports.authController = new AuthController();

@@ -1,19 +1,25 @@
-import dotenv from "dotenv";
-import { z } from "zod";
-dotenv.config();
-const envSchema = z.object({
-    NODE_ENV: z
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.env = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+const zod_1 = require("zod");
+dotenv_1.default.config();
+const envSchema = zod_1.z.object({
+    NODE_ENV: zod_1.z
         .enum(["development", "production", "test"])
         .default("development"),
-    PORT: z.coerce.number().default(5000),
-    DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-    JWT_EXPIRES_IN: z.string().default("7d"),
-    JWT_SECRET: z
+    PORT: zod_1.z.coerce.number().default(5000),
+    DATABASE_URL: zod_1.z.string().min(1, "DATABASE_URL is required"),
+    JWT_EXPIRES_IN: zod_1.z.string().default("7d"),
+    JWT_SECRET: zod_1.z
         .string()
         .min(32, "JWT_SECRET must be at least 32 characters long"),
-    CLOUDINARY_CLOUD_NAME: z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
-    CLOUDINARY_API_KEY: z.string().min(1, "CLOUDINARY_API_KEY is required"),
-    CLOUDINARY_API_SECRET: z.string().min(1, "CLOUDINARY_API_SECRET is required"),
+    CLOUDINARY_CLOUD_NAME: zod_1.z.string().min(1, "CLOUDINARY_CLOUD_NAME is required"),
+    CLOUDINARY_API_KEY: zod_1.z.string().min(1, "CLOUDINARY_API_KEY is required"),
+    CLOUDINARY_API_SECRET: zod_1.z.string().min(1, "CLOUDINARY_API_SECRET is required"),
 });
 const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
@@ -21,4 +27,4 @@ if (!parsed.success) {
     console.error(parsed.error.format());
     process.exit(1);
 }
-export const env = parsed.data;
+exports.env = parsed.data;

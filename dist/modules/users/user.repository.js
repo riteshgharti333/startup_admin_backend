@@ -1,37 +1,41 @@
-import { prisma } from "../../database/client";
-export class UserRepository {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRepository = exports.UserRepository = void 0;
+const client_1 = require("../../database/client");
+class UserRepository {
     async findById(id) {
-        return prisma.user.findUnique({
+        return client_1.prisma.user.findUnique({
             where: { id },
         });
     }
     async findByEmail(email) {
-        return prisma.user.findUnique({
+        return client_1.prisma.user.findUnique({
             where: { email },
         });
     }
     async findMany() {
-        return prisma.user.findMany({
+        return client_1.prisma.user.findMany({
             orderBy: {
                 createdAt: "desc",
             },
         });
     }
     async create(data) {
-        return prisma.user.create({
+        return client_1.prisma.user.create({
             data,
         });
     }
     async update(id, data) {
-        return prisma.user.update({
+        return client_1.prisma.user.update({
             where: { id },
             data,
         });
     }
     async delete(id) {
-        return prisma.user.delete({
+        return client_1.prisma.user.delete({
             where: { id },
         });
     }
 }
-export const userRepository = new UserRepository();
+exports.UserRepository = UserRepository;
+exports.userRepository = new UserRepository();

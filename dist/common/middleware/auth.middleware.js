@@ -1,18 +1,21 @@
-import { AppError } from "../errors/AppError";
-import { verifyToken } from "../utils/jwt";
-import { HTTP_STATUS } from "../constants/httpStatus";
-import { MESSAGES } from "../constants/messages";
-export const authMiddleware = (req, _res, next) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authMiddleware = void 0;
+const AppError_1 = require("../errors/AppError");
+const jwt_1 = require("../utils/jwt");
+const httpStatus_1 = require("../constants/httpStatus");
+const messages_1 = require("../constants/messages");
+const authMiddleware = (req, _res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith("Bearer ")) {
-        return next(new AppError({
-            statusCode: HTTP_STATUS.UNAUTHORIZED,
-            message: MESSAGES.AUTHENTICATION_REQUIRED,
+        return next(new AppError_1.AppError({
+            statusCode: httpStatus_1.HTTP_STATUS.UNAUTHORIZED,
+            message: messages_1.MESSAGES.AUTHENTICATION_REQUIRED,
         }));
     }
     const token = authHeader.substring(7);
     try {
-        const payload = verifyToken(token);
+        const payload = (0, jwt_1.verifyToken)(token);
         req.user = {
             userId: payload.userId,
             email: payload.email,
@@ -21,9 +24,10 @@ export const authMiddleware = (req, _res, next) => {
         next();
     }
     catch {
-        next(new AppError({
-            statusCode: HTTP_STATUS.UNAUTHORIZED,
-            message: MESSAGES.INVALID_OR_EXPIRED_TOKEN,
+        next(new AppError_1.AppError({
+            statusCode: httpStatus_1.HTTP_STATUS.UNAUTHORIZED,
+            message: messages_1.MESSAGES.INVALID_OR_EXPIRED_TOKEN,
         }));
     }
 };
+exports.authMiddleware = authMiddleware;

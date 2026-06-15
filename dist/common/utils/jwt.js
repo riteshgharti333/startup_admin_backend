@@ -1,12 +1,19 @@
-import jwt from "jsonwebtoken";
-import { env } from "../../config/env";
-const JWT_SECRET = env.JWT_SECRET;
-const JWT_OPTIONS = {
-    expiresIn: env.JWT_EXPIRES_IN,
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-export function generateToken(payload) {
-    return jwt.sign(payload, JWT_SECRET, JWT_OPTIONS);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateToken = generateToken;
+exports.verifyToken = verifyToken;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const env_1 = require("../../config/env");
+const JWT_SECRET = env_1.env.JWT_SECRET;
+const JWT_OPTIONS = {
+    expiresIn: env_1.env.JWT_EXPIRES_IN,
+};
+function generateToken(payload) {
+    return jsonwebtoken_1.default.sign(payload, JWT_SECRET, JWT_OPTIONS);
 }
-export function verifyToken(token) {
-    return jwt.verify(token, JWT_SECRET);
+function verifyToken(token) {
+    return jsonwebtoken_1.default.verify(token, JWT_SECRET);
 }

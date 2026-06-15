@@ -1,14 +1,17 @@
-import { PrismaClient } from "@prisma/client";
-export const prisma = global.prisma ??
-    new PrismaClient({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.connectDatabase = exports.prisma = void 0;
+const client_1 = require("@prisma/client");
+exports.prisma = global.prisma ??
+    new client_1.PrismaClient({
         log: process.env.NODE_ENV === "development"
             ? ["query", "info", "warn", "error"]
             : ["error"],
     });
 // Add this function to test and log database connection
-export const connectDatabase = async () => {
+const connectDatabase = async () => {
     try {
-        await prisma.$connect();
+        await exports.prisma.$connect();
         console.log("✅ Database connected successfully");
         // Or use your logger:
         // logger.info("Database connected successfully");
@@ -20,6 +23,7 @@ export const connectDatabase = async () => {
         return false;
     }
 };
+exports.connectDatabase = connectDatabase;
 if (process.env.NODE_ENV !== "production") {
-    global.prisma = prisma;
+    global.prisma = exports.prisma;
 }

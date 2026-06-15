@@ -1,50 +1,53 @@
-import { asyncHandler } from "../../common/utils/asyncHandler";
-import { apiResponse } from "../../common/utils/apiResponse";
-import { userService } from "./user.service";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userController = void 0;
+const asyncHandler_1 = require("../../common/utils/asyncHandler");
+const apiResponse_1 = require("../../common/utils/apiResponse");
+const user_service_1 = require("./user.service");
 class UserController {
-    getAllUsers = asyncHandler(async (_req, res) => {
-        const users = await userService.getAllUsers();
-        return apiResponse({
+    getAllUsers = (0, asyncHandler_1.asyncHandler)(async (_req, res) => {
+        const users = await user_service_1.userService.getAllUsers();
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "Users fetched successfully",
             data: users,
         });
     });
-    getUserById = asyncHandler(async (req, res) => {
+    getUserById = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
         const userId = req.params.id;
-        const user = await userService.getUserById(userId);
-        return apiResponse({
+        const user = await user_service_1.userService.getUserById(userId);
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "User fetched successfully",
             data: user,
         });
     });
-    createUser = asyncHandler(async (req, res) => {
-        const user = await userService.createUser(req.body);
-        return apiResponse({
+    createUser = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
+        const user = await user_service_1.userService.createUser(req.body);
+        return (0, apiResponse_1.apiResponse)({
             res,
             statusCode: 201,
             message: "User created successfully",
             data: user,
         });
     });
-    updateUser = asyncHandler(async (req, res) => {
+    updateUser = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
         const userId = req.params.id;
-        const user = await userService.updateUser(userId, req.body);
-        return apiResponse({
+        const user = await user_service_1.userService.updateUser(userId, req.body);
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "User updated successfully",
             data: user,
         });
     });
-    deleteUser = asyncHandler(async (req, res) => {
+    deleteUser = (0, asyncHandler_1.asyncHandler)(async (req, res) => {
         const userId = req.params.id;
-        await userService.deleteUser(userId);
-        return apiResponse({
+        await user_service_1.userService.deleteUser(userId);
+        return (0, apiResponse_1.apiResponse)({
             res,
             message: "User deleted successfully",
             data: null,
         });
     });
 }
-export const userController = new UserController();
+exports.userController = new UserController();

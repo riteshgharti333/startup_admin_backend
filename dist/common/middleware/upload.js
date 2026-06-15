@@ -1,14 +1,20 @@
-import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { env } from "../../config/env";
-cloudinary.config({
-    cloud_name: env.CLOUDINARY_CLOUD_NAME,
-    api_key: env.CLOUDINARY_API_KEY,
-    api_secret: env.CLOUDINARY_API_SECRET,
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upload = void 0;
+const multer_1 = __importDefault(require("multer"));
+const cloudinary_1 = require("cloudinary");
+const multer_storage_cloudinary_1 = require("multer-storage-cloudinary");
+const env_1 = require("../../config/env");
+cloudinary_1.v2.config({
+    cloud_name: env_1.env.CLOUDINARY_CLOUD_NAME,
+    api_key: env_1.env.CLOUDINARY_API_KEY,
+    api_secret: env_1.env.CLOUDINARY_API_SECRET,
 });
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
+const storage = new multer_storage_cloudinary_1.CloudinaryStorage({
+    cloudinary: cloudinary_1.v2,
     params: async (_req, file) => {
         const allowedFormats = ["pdf", "doc", "docx"];
         const ext = file.originalname.split(".").pop()?.toLowerCase();
@@ -32,7 +38,7 @@ const fileFilter = (_req, file, cb) => {
         cb(new Error("Only PDF, DOC, or DOCX files are allowed"), false);
     }
 };
-export const upload = multer({
+exports.upload = (0, multer_1.default)({
     storage,
     fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit

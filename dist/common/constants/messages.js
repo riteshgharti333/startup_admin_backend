@@ -1,4 +1,7 @@
-export const MESSAGES = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MESSAGES = void 0;
+exports.MESSAGES = {
     USER_CREATED: "User created successfully",
     USER_UPDATED: "User updated successfully",
     USER_DELETED: "User deleted successfully",

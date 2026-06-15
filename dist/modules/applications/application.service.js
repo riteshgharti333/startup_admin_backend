@@ -1,26 +1,30 @@
-import { AppError } from "../../common/errors/AppError";
-import { applicationRepository } from "./application.repository";
-import { HTTP_STATUS } from "../../common/constants/httpStatus";
-export class ApplicationService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.applicationService = exports.ApplicationService = void 0;
+const AppError_1 = require("../../common/errors/AppError");
+const application_repository_1 = require("./application.repository");
+const httpStatus_1 = require("../../common/constants/httpStatus");
+class ApplicationService {
     async getAllApplications() {
-        return applicationRepository.findMany();
+        return application_repository_1.applicationRepository.findMany();
     }
     async getApplicationById(id) {
-        const application = await applicationRepository.findById(id);
+        const application = await application_repository_1.applicationRepository.findById(id);
         if (!application) {
-            throw new AppError({
-                statusCode: HTTP_STATUS.NOT_FOUND,
+            throw new AppError_1.AppError({
+                statusCode: httpStatus_1.HTTP_STATUS.NOT_FOUND,
                 message: "Application not found",
             });
         }
         return application;
     }
     async createApplication(data) {
-        return applicationRepository.create(data);
+        return application_repository_1.applicationRepository.create(data);
     }
     async deleteApplication(id) {
         await this.getApplicationById(id);
-        await applicationRepository.delete(id);
+        await application_repository_1.applicationRepository.delete(id);
     }
 }
-export const applicationService = new ApplicationService();
+exports.ApplicationService = ApplicationService;
+exports.applicationService = new ApplicationService();

@@ -1,4 +1,7 @@
-export const validate = (schema) => async (req, _res, next) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validate = void 0;
+const validate = (schema) => async (req, _res, next) => {
     try {
         await schema.parseAsync({
             body: req.body,
@@ -11,3 +14,4 @@ export const validate = (schema) => async (req, _res, next) => {
         next(error);
     }
 };
+exports.validate = validate;
