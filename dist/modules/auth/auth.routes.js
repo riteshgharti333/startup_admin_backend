@@ -8,6 +8,6 @@ const auth_validation_1 = require("./auth.validation");
 const auth_middleware_1 = require("../../common/middleware/auth.middleware");
 const router = (0, express_1.Router)();
 exports.authRouter = router;
-router.post("/register", (0, validate_middleware_1.validate)(auth_validation_1.registerSchema), auth_controller_1.authController.register);
 router.post("/login", (0, validate_middleware_1.validate)(auth_validation_1.loginSchema), auth_controller_1.authController.login);
 router.get("/me", auth_middleware_1.authMiddleware, auth_controller_1.authController.me);
+router.post("/logout", auth_middleware_1.authMiddleware, auth_controller_1.authController.logout);

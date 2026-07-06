@@ -7,9 +7,9 @@ const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app"));
 const env_1 = require("./config/env");
 const logger_1 = require("./config/logger");
-const client_1 = require("./database/client"); // Import the connect function
+const client_1 = require("./database/client");
 const server = http_1.default.createServer(app_1.default);
-// Connect to database before starting server
+// Connect to database befo re starting server
 const startServer = async () => {
     try {
         // Test database connection

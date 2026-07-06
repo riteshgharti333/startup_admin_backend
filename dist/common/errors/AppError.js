@@ -2,9 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppError = void 0;
 class AppError extends Error {
-    statusCode;
-    isOperational;
-    details;
     constructor({ statusCode, message, isOperational = true, details, }) {
         super(message);
         this.name = "AppError";
