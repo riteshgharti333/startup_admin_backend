@@ -22,7 +22,7 @@ export function setTokenCookie(res: Response, token: string): void {
   res.cookie("twipra-token", token, {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   });
@@ -32,7 +32,7 @@ export function clearTokenCookie(res: Response): void {
   res.cookie("twipra-token", "", {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
     maxAge: 0,
     path: "/",
   });

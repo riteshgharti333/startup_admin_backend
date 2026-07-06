@@ -6,11 +6,7 @@ import { prisma, connectDatabase } from "./database/client";
 
 const server = http.createServer(app);
 
-process.on("uncaughtException", (error) => {
-  console.error("💥 CRASH DETAILS:", error.message);
-  console.error("💥 STACK:", error.stack);
-  process.exit(1);
-});
+
 
 // Connect to database befo re starting server
 const startServer = async () => {
