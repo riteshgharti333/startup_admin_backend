@@ -21,9 +21,9 @@ export function generateToken(payload: JwtPayload): string {
 export function setTokenCookie(res: Response, token: string): void {
   res.cookie("twipra-token", token, {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: true,
+    sameSite: "none",
+    maxAge: 120 * 24 * 60 * 60 * 1000,
     path: "/",
   });
 }
@@ -31,8 +31,8 @@ export function setTokenCookie(res: Response, token: string): void {
 export function clearTokenCookie(res: Response): void {
   res.cookie("twipra-token", "", {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
+    secure: true,
+    sameSite: "none",
     maxAge: 0,
     path: "/",
   });
