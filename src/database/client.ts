@@ -9,23 +9,20 @@ declare global {
 export const prisma =
   global.prisma ??
   new PrismaClient({
-    log:
+    log: 
       process.env.NODE_ENV === "development"
-        ? ["query", "info", "warn", "error"]
-        : ["error"],
+        ? ["info", "warn", "error"] //Removed "query" - hides SELECT/INSERT logs
+        : ["error"], // Production: only errors
   });
 
 // Add this function to test and log database connection
 export const connectDatabase = async () => {
   try {
     await prisma.$connect();
-    console.log("✅ Database connected successfully");
-    // Or use your logger:
-    // logger.info("Database connected successfully");
+    console.log("Database connected successfully");
     return true;
   } catch (error) {
-    console.error("❌ Database connection failed:", error);
-    // logger.error("Database connection failed", { error });
+    console.error("Database connection failed:", error);
     return false;
   }
 };

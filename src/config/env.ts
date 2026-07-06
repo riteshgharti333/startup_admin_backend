@@ -8,13 +8,13 @@ const envSchema = z.object({
     .enum(["development", "production", "test"])
     .default("development"),
 
-  PORT: z.coerce.number().default(5000),
+  PORT: z.coerce.number().default(5000), 
 
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
 
   JWT_EXPIRES_IN: z.string().default("7d"),
 
-  JWT_SECRET: z
+  JWT_SECRET: z 
     .string()
     .min(32, "JWT_SECRET must be at least 32 characters long"),
 

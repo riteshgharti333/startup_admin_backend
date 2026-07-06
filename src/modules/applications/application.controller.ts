@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import { asyncHandler } from "../../common/utils/asyncHandler";
 import { apiResponse } from "../../common/utils/apiResponse";
 import { applicationService } from "./application.service";
+import { HTTP_STATUS } from "../../common/constants/httpStatus";
+import { AppError } from "../../common/errors/AppError";
 
 class ApplicationController {
   getAllApplications = asyncHandler(async (_req: Request, res: Response) => {
@@ -16,7 +18,8 @@ class ApplicationController {
 
   getApplicationById = asyncHandler(async (req: Request, res: Response) => {
     const applicationId = req.params.id as string;
-    const application = await applicationService.getApplicationById(applicationId);
+    const application =
+      await applicationService.getApplicationById(applicationId);
 
     return apiResponse({
       res,
@@ -26,20 +29,19 @@ class ApplicationController {
   });
 
   createApplication = asyncHandler(async (req: Request, res: Response) => {
-    // Parse JSON data from form-data
-    const applicationData = JSON.parse(req.body.data);
-    
-    // Get uploaded resume URL from Cloudinary
-    const resumeUrl = (req.file as any)?.path;
-    
-    if (!resumeUrl) {
-      throw new Error("Resume/CV is required");
+    console.log("✅ Controller reached"); // Does this log?
+    console.log("req.body:", req.body); // What does this show?
+    const applicationData = req.body;
+
+    if (!applicationData.resumeUrl) {
+      throw new AppError({
+        statusCode: HTTP_STATUS.BAD_REQUEST,
+        message: "Resume/CV is required",
+      });
     }
 
-    const application = await applicationService.createApplication({
-      ...applicationData,
-      resumeUrl,
-    });
+    const application =
+      await applicationService.createApplication(applicationData);
 
     return apiResponse({
       res,

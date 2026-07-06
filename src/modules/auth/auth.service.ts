@@ -1,15 +1,9 @@
 import { AppError } from "../../common/errors/AppError";
-import { comparePassword, hashPassword } from "../../common/utils/password";
-import { generateToken } from "../../common/utils/jwt";
+import { comparePassword } from "../../common/utils/password";
+import { generateToken } from "../../common/utils/cookie";
 import { userRepository } from "../users/user.repository";
 import { HTTP_STATUS } from "../../common/constants/httpStatus";
 import { MESSAGES } from "../../common/constants/messages";
-
-interface RegisterDto {
-  name: string;
-  email: string;
-  password: string;
-}
 
 interface LoginDto {
   email: string;
@@ -17,40 +11,6 @@ interface LoginDto {
 }
 
 class AuthService {
-  async register(data: RegisterDto) {
-    const existingUser = await userRepository.findByEmail(data.email);
-
-    if (existingUser) {
-      throw new AppError({
-        statusCode: HTTP_STATUS.CONFLICT,
-        message: MESSAGES.EMAIL_ALREADY_EXISTS,
-      });
-    }
-
-    const hashedPassword = await hashPassword(data.password);
-
-    const user = await userRepository.create({
-      name: data.name,
-      email: data.email,
-      password: hashedPassword,
-    });
-
-    const token = generateToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    });
-
-    return {
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-      token,
-    };
-  }
-
   async login(data: LoginDto) {
     const user = await userRepository.findByEmail(data.email);
 
@@ -65,11 +25,12 @@ class AuthService {
 
     if (!isPasswordValid) {
       throw new AppError({
-        statusCode: HTTP_STATUS.CONFLICT,
-        message: "Invalid Email & Password",
+        statusCode: HTTP_STATUS.UNAUTHORIZED,
+        message: MESSAGES.INVALID_CREDENTIALS,
       });
     }
 
+    // Generate JWT token
     const token = generateToken({
       userId: user.id,
       email: user.email,
@@ -81,6 +42,7 @@ class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       token,
     };
@@ -103,6 +65,21 @@ class AuthService {
       role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+    };
+  }
+
+  async logout(userId: string) {
+    const user = await userRepository.findById(userId);
+
+    if (!user) {
+      throw new AppError({
+        statusCode: HTTP_STATUS.NOT_FOUND,
+        message: MESSAGES.USER_NOT_FOUND,
+      });
+    }
+
+    return {
+      message: "Logged out successfully",
     };
   }
 }

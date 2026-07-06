@@ -2,11 +2,17 @@ import http from "http";
 import app from "./app";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
-import { prisma, connectDatabase } from "./database/client"; // Import the connect function
+import { prisma, connectDatabase } from "./database/client";
 
 const server = http.createServer(app);
 
-// Connect to database before starting server
+process.on("uncaughtException", (error) => {
+  console.error("💥 CRASH DETAILS:", error.message);
+  console.error("💥 STACK:", error.stack);
+  process.exit(1);
+});
+
+// Connect to database befo re starting server
 const startServer = async () => {
   try {
     // Test database connection

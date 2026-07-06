@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 
 import { AppError } from "../errors/AppError";
-import { verifyToken } from "../utils/jwt";
+import { verifyToken } from "../utils/cookie";
 import { HTTP_STATUS } from "../constants/httpStatus";
 import { MESSAGES } from "../constants/messages";
 
@@ -10,9 +10,20 @@ export const authMiddleware = (
   _res: Response,
   next: NextFunction,
 ): void => {
-  const authHeader = req.headers.authorization;
+  // 1. Check cookie first
+  let token = req.cookies?.["twipra-token"];
 
-  if (!authHeader?.startsWith("Bearer ")) {
+  // 2. Fallback to Authorization header
+  if (!token) {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.substring(7);
+    }
+  }
+
+  // 3. No token found
+  if (!token) {
     return next(
       new AppError({
         statusCode: HTTP_STATUS.UNAUTHORIZED,
@@ -21,8 +32,7 @@ export const authMiddleware = (
     );
   }
 
-  const token = authHeader.substring(7);
-
+  // 4. Verify token
   try {
     const payload = verifyToken(token);
 
