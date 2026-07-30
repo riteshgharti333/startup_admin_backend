@@ -36,7 +36,6 @@ class EmailService {
       replyTo: to,
     });
   }
-
   async sendLeadNotification(data: LeadEmailData): Promise<void> {
     const adminEmail =
       process.env.ADMIN_EMAIL || "twipratechnologies@gmail.com";
