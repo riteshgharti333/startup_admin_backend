@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Filter = void 0;
-// src/common/utils/filter.ts
 const pagination_1 = require("./pagination");
 class Filter {
     static async filter(findMany, params) {

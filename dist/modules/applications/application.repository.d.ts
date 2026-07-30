@@ -1,0 +1,122 @@
+import { UpdateApplicationDto } from "./application.types";
+export declare class ApplicationRepository {
+    findMany(): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }[]>;
+    findById(id: string): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    } | null>;
+    create(data: {
+        fullName: string;
+        email: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl?: string;
+        linkedInProfile?: string;
+        githubProfile?: string;
+        resumeUrl: string;
+        coverLetter?: string;
+    }): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }>;
+    update(id: string, data: UpdateApplicationDto): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }>;
+    delete(id: string): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }>;
+    count(): Promise<number>;
+    search(args: any): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }[]>;
+    filter(args: any): Promise<{
+        id: string;
+        email: string;
+        createdAt: Date;
+        updatedAt: Date;
+        fullName: string;
+        phoneNumber: string;
+        position: string;
+        yearsOfExperience: string;
+        portfolioUrl: string | null;
+        linkedInProfile: string | null;
+        githubProfile: string | null;
+        coverLetter: string | null;
+        resumeUrl: string;
+    }[]>;
+}
+export declare const applicationRepository: ApplicationRepository;
+//# sourceMappingURL=application.repository.d.ts.map

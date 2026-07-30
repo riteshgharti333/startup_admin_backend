@@ -1,0 +1,17 @@
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+export interface CreateUserDto {
+    name: string;
+    email: string;
+    password: string;
+}
+export interface UpdateUserDto {
+    name?: string;
+    email?: string;
+}
+//# sourceMappingURL=user.types.d.ts.map
