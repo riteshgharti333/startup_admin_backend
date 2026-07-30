@@ -6,6 +6,7 @@ import { Pagination } from "../../common/utils/pagination";
 import { Search } from "../../common/utils/search";
 import { Filter } from "../../common/utils/filter";
 import { Lead } from "@prisma/client";
+import emailService from "./email.service";
 
 export class LeadService {
   async getAllLeads(query: { cursor?: string; limit?: string }) {
@@ -29,7 +30,21 @@ export class LeadService {
   async createLead(data: CreateLeadDto) {
     await leadRepository.findByEmail(data.email);
 
-    return leadRepository.create(data);
+    const lead = await leadRepository.create(data);
+
+    await emailService.sendLeadNotification({
+      fullName: data.fullName,
+      email: data.email,
+      phone: data.phone,
+      company: data.company,
+      service: data.service,
+      budget: data.budget,
+      details: data.details,
+    });
+
+    await emailService.sendAutoReply(data.email, data.fullName);
+
+    return lead;
   }
 
   async updateLead(id: string, data: UpdateLeadDto) {
