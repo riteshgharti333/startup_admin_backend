@@ -19,17 +19,17 @@ function generateToken(payload) {
 function setTokenCookie(res, token) {
     res.cookie("twipra-token", token, {
         httpOnly: true,
-        secure: env_1.env.NODE_ENV === "production",
-        sameSite: env_1.env.NODE_ENV === "production" ? "strict" : "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "none",
+        maxAge: 120 * 24 * 60 * 60 * 1000,
         path: "/",
     });
 }
 function clearTokenCookie(res) {
     res.cookie("twipra-token", "", {
         httpOnly: true,
-        secure: env_1.env.NODE_ENV === "production",
-        sameSite: env_1.env.NODE_ENV === "production" ? "strict" : "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 0,
         path: "/",
     });

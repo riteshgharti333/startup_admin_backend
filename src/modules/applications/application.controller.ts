@@ -6,8 +6,8 @@ import { HTTP_STATUS } from "../../common/constants/httpStatus";
 import { AppError } from "../../common/errors/AppError";
 
 class ApplicationController {
-  getAllApplications = asyncHandler(async (_req: Request, res: Response) => {
-    const applications = await applicationService.getAllApplications();
+  getAllApplications = asyncHandler(async (req: Request, res: Response) => {
+    const applications = await applicationService.getAllApplications(req.query);
 
     return apiResponse({
       res,
@@ -29,8 +29,6 @@ class ApplicationController {
   });
 
   createApplication = asyncHandler(async (req: Request, res: Response) => {
-    console.log("✅ Controller reached"); // Does this log?
-    console.log("req.body:", req.body); // What does this show?
     const applicationData = req.body;
 
     if (!applicationData.resumeUrl) {
@@ -45,8 +43,23 @@ class ApplicationController {
 
     return apiResponse({
       res,
-      statusCode: 201,
+      statusCode: HTTP_STATUS.CREATED,
       message: "Application submitted successfully",
+      data: application,
+    });
+  });
+
+  updateApplication = asyncHandler(async (req: Request, res: Response) => {
+    const applicationId = req.params.id as string;
+    const updateData = req.body;
+    const application = await applicationService.updateApplication(
+      applicationId,
+      updateData,
+    );
+
+    return apiResponse({
+      res,
+      message: "Application updated successfully",
       data: application,
     });
   });
@@ -59,6 +72,26 @@ class ApplicationController {
       res,
       message: "Application deleted successfully",
       data: null,
+    });
+  });
+
+  searchApplications = asyncHandler(async (req: Request, res: Response) => {
+    const applications = await applicationService.searchApplications(req.query);
+
+    return apiResponse({
+      res,
+      message: "Applications found successfully",
+      data: applications,
+    });
+  });
+
+  filterApplications = asyncHandler(async (req: Request, res: Response) => {
+    const applications = await applicationService.filterApplications(req.query);
+
+    return apiResponse({
+      res,
+      message: "Applications filtered successfully",
+      data: applications,
     });
   });
 }

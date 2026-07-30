@@ -18,10 +18,28 @@ class ApplicationRepository {
             data,
         });
     }
+    async update(id, data) {
+        return client_1.prisma.application.update({
+            where: { id },
+            data,
+        });
+    }
     async delete(id) {
         return client_1.prisma.application.delete({
             where: { id },
         });
+    }
+    // Add count method for pagination
+    async count() {
+        return client_1.prisma.application.count();
+    }
+    // Add search method
+    async search(args) {
+        return client_1.prisma.application.findMany(args);
+    }
+    // Add filter method
+    async filter(args) {
+        return client_1.prisma.application.findMany(args);
     }
 }
 exports.ApplicationRepository = ApplicationRepository;

@@ -1,4 +1,5 @@
 import { prisma } from "../../database/client";
+import { UpdateApplicationDto } from "./application.types";
 
 export class ApplicationRepository {
   async findMany() {
@@ -17,7 +18,7 @@ export class ApplicationRepository {
     fullName: string;
     email: string;
     phoneNumber: string;
-    position: string; 
+    position: string;
     yearsOfExperience: string;
     portfolioUrl?: string;
     linkedInProfile?: string;
@@ -30,10 +31,32 @@ export class ApplicationRepository {
     });
   }
 
+  async update(id: string, data: UpdateApplicationDto) {
+    return prisma.application.update({
+      where: { id },
+      data,
+    });
+  }
+
   async delete(id: string) {
     return prisma.application.delete({
       where: { id },
     });
+  }
+
+  // Add count method for pagination
+  async count() {
+    return prisma.application.count();
+  }
+
+  // Add search method
+  async search(args: any) {
+    return prisma.application.findMany(args);
+  }
+
+  // Add filter method
+  async filter(args: any) {
+    return prisma.application.findMany(args);
   }
 }
 

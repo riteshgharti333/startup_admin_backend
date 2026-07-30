@@ -23,7 +23,12 @@ app.use(requestLogger_middleware_1.requestLogger);
 app.use((0, cookie_parser_1.default)());
 // CORS
 app.use((0, cors_1.default)({
-    origin: true,
+    origin: [
+        process.env.FRONTEND_URL || "http://localhost:3000",
+        process.env.ADMIN_URL || "http://localhost:5173",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
     credentials: true,
 }));
 // Compression
