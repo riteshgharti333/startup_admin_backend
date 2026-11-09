@@ -27,8 +27,8 @@ app.use(
       process.env.ADMIN_URL || "http://localhost:5173",
       "http://localhost:5173",
       "http://localhost:3000",
-    ],
-    credentials: true,
+    ], 
+    credentials: true,  
   }),
 );
 
@@ -45,12 +45,12 @@ app.use(express.urlencoded({ extended: true }));
 // Health check
 app.get("/health", (_req, res) => {
   res.status(200).json({
-    success: true,
+    success: true, 
     message: "Server is running",
   });
-});
+}); 
 
-// TODO: Register API routes here
+// TODO: Register API routes here 
 // app.use("/api/v1", routes);
 app.use("/api/v1", routes);
 

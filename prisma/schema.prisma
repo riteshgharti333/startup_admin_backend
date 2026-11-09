@@ -62,3 +62,223 @@ model EmailSubscriber {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+enum LeadStatus {
+  NEW
+  CONTACTED
+  INTERESTED
+  FOLLOW_UP
+  NOT_INTERESTED
+  CONVERTED
+  LOST
+}
+
+enum EmailStatus {
+  NOT_SENT
+  SENT
+  FAILED
+}
+
+enum WhatsAppStatus {
+  NOT_SENT
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum MessageChannel {
+  EMAIL
+  WHATSAPP
+  SYSTEM
+}
+
+enum MessageLogStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum LogLevel {
+  INFO
+  WARNING
+  ERROR
+}
+
+// ==========================================
+// DATA COLLECTION / LEAD LIST
+// ==========================================
+
+model BusinessList {
+  id          String   @id @default(uuid()) @db.Uuid
+
+  title       String
+  category    String
+  location    String?
+  keyword     String?
+  description String?  @db.Text
+
+  businesses  Business[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([location])
+  @@index([keyword])
+}
+
+// ==========================================
+// BUSINESS
+// ==========================================
+
+model Business {
+  id              String   @id @default(uuid()) @db.Uuid
+
+  // Collection
+  businessListId  String   @db.Uuid
+  businessList    BusinessList @relation(fields: [businessListId], references: [id], onDelete: Cascade)
+
+  // Google Maps information
+  placeId         String?  @unique
+  businessName    String
+  category        String?
+  phoneNumber     String?
+  email           String?
+  website         String?
+  fullAddress     String?
+  city            String?
+  googleMapsUrl   String?
+
+  // Google Maps quality signals
+  rating          Float?
+  reviewCount     Int?
+
+  // Contact
+  contactPerson   String?
+
+  // Lead management
+  leadStatus      LeadStatus @default(NEW)
+  notes           String?    @db.Text
+  lastContactedAt DateTime?
+  nextFollowUpAt  DateTime?
+
+  // Email tracking
+  emailStatus     EmailStatus @default(NOT_SENT)
+  lastEmailSentAt DateTime?
+  emailCount      Int         @default(0)
+
+  // WhatsApp tracking
+  whatsappStatus     WhatsAppStatus @default(NOT_SENT)
+  lastWhatsAppSentAt DateTime?
+  whatsappCount      Int            @default(0)
+
+  // WhatsApp permission
+  whatsappOptIn      Boolean   @default(false)
+  whatsappOptInAt    DateTime?
+
+  // Relations
+  emailHistory       EmailHistory[]
+  whatsappHistory    WhatsAppHistory[]
+  activityLogs       ActivityLog[]
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([businessListId])
+  @@index([businessName])
+  @@index([city])
+  @@index([category])
+  @@index([phoneNumber])
+  @@index([leadStatus])
+  @@index([nextFollowUpAt])
+  @@index([emailStatus])
+  @@index([whatsappStatus])
+  @@index([rating])
+  @@index([reviewCount])
+}
+
+// ==========================================
+// EMAIL HISTORY
+// ==========================================
+
+model EmailHistory {
+  id                String @id @default(uuid()) @db.Uuid
+
+  businessId        String @db.Uuid
+  business          Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  recipient         String
+  subject           String
+  body              String @db.Text
+
+  status            MessageLogStatus @default(PENDING)
+
+  providerMessageId String?
+  errorMessage      String? @db.Text
+
+  sentAt            DateTime?
+  createdAt         DateTime @default(now())
+
+  @@index([businessId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ==========================================
+// WHATSAPP HISTORY
+// ==========================================
+
+model WhatsAppHistory {
+  id                String @id @default(uuid()) @db.Uuid
+
+  businessId        String @db.Uuid
+  business          Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  recipient         String
+  message           String @db.Text
+  templateName      String?
+
+  status            MessageLogStatus @default(PENDING)
+
+  providerMessageId String?
+  errorMessage      String? @db.Text
+
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  readAt            DateTime?
+
+  createdAt         DateTime @default(now())
+
+  @@index([businessId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ==========================================
+// PLATFORM ACTIVITY LOGS
+// ==========================================
+
+model ActivityLog {
+  id          String   @id @default(uuid()) @db.Uuid
+
+  businessId  String?  @db.Uuid
+  business    Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  channel     MessageChannel
+  level       LogLevel @default(INFO)
+
+  action      String
+  status      MessageLogStatus?
+  message     String?  @db.Text
+  details     Json?
+
+  createdAt   DateTime @default(now())
+
+  @@index([businessId])
+  @@index([channel])
+  @@index([level])
+  @@index([status])
+  @@index([createdAt])
+}
