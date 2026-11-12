@@ -19,6 +19,19 @@ export class BusinessListRepository {
       where: { id },
       include: {
         _count: { select: { businesses: true } },
+        businesses: {
+          select: {
+            id: true,
+            businessName: true,
+            city: true,
+            phoneNumber: true,
+            rating: true,
+            reviewCount: true,
+            website: true,
+            leadStatus: true,
+          },
+          orderBy: { businessName: "asc" },
+        },
       },
     });
   }
